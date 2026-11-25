@@ -243,8 +243,34 @@
 
 <div class="fs-root" id="fsRoot" hidden>
   <div class="fs-body" id="fsBody"></div>
+
+  <div class="qr-dialog" id="qrDialog" hidden role="dialog" aria-modal="true" aria-labelledby="qrTitle">
+    <div class="qr-dialog__backdrop" id="qrBackdrop"></div>
+    <div class="qr-dialog__panel">
+      <div class="q-card">
+        <div class="q-card__section q-card__section--vert qr-dialog__head">
+          <div class="text-h6" id="qrTitle">二维码展示</div>
+          <button type="button" id="qrClose" aria-label="关闭"
+            class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round q-btn--dense q-btn--actionable q-focusable q-hoverable">
+            <span class="q-focus-helper"></span>
+            <span class="q-btn__wrapper col row q-anchor--skip">
+              <span class="q-btn__content text-center col items-center q-anchor--skip justify-center row">
+                <i class="material-icons q-icon notranslate">close</i>
+              </span>
+            </span>
+          </button>
+        </div>
+        <hr class="q-separator q-separator--horizontal">
+        <div class="q-card__section q-card__section--vert qr-dialog__body">
+          <canvas id="qrCanvas" class="q-mb-xl" width="250" height="250"
+            style="width:250px;height:250px"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
+<script src="js/qrcode.js"></script>
 <script src="leave-detail.js"></script>
 </body>
 </html>

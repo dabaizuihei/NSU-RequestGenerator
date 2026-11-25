@@ -270,3 +270,16 @@ body{display:flex;flex-direction:column}
 .fs-app .pf{position:static;order:1;flex:0 0 auto}
 .fs-app .app-body{padding-bottom:0}
 
+/* ============ 二维码弹窗 ============ */
+.qr-dialog{position:absolute;inset:0;z-index:6;display:flex;align-items:center;justify-content:center;padding:24px}
+.qr-dialog[hidden]{display:none}
+.qr-dialog__backdrop{position:absolute;inset:0;background:rgba(0,0,0,.4);animation:qr-fade .2s ease-out}
+.qr-dialog__panel{position:relative;width:100%;max-width:500px;animation:qr-pop .2s ease-out}
+.qr-dialog__panel .q-card{width:100%;background:#fff;border-radius:4px;overflow:auto;
+  box-shadow:0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px rgba(0,0,0,.14),0 1px 10px rgba(0,0,0,.12)}
+.qr-dialog__head{display:flex;align-items:center;justify-content:space-between;padding:16px}
+.qr-dialog__body{padding:16px;text-align:center}
+.qr-dialog__body canvas{display:block;margin-left:auto;margin-right:auto}
+@keyframes qr-fade{from{opacity:0}}
+@keyframes qr-pop{from{opacity:0;transform:scale(.9)}}
+

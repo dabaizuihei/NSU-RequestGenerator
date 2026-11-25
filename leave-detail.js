@@ -407,6 +407,9 @@
       backBtn.style.cursor = 'pointer';
       backBtn.addEventListener('click', closeFs);
     }
+    // 全屏页脚的「请假信息二维码」→ 打开二维码弹窗
+    var qrBtn = wrap.querySelector('#pfQr');
+    if (qrBtn) qrBtn.addEventListener('click', openQr);
   }
   function openFs() {
     if (!fsRoot) return;
@@ -416,12 +419,16 @@
   }
   function closeFs() {
     if (!fsRoot) return;
+    closeQr();
     fsRoot.classList.remove('is-open');
     fsRoot.hidden = true;
   }
   if ($('btnFs')) $('btnFs').addEventListener('click', openFs);
   document.addEventListener('keydown', function (e) {
-    if (e.key === 'Escape' && fsRoot && !fsRoot.hidden) closeFs();
+    if (e.key !== 'Escape' || !fsRoot || fsRoot.hidden) return;
+    // 二维码弹窗打开时，Esc 只关闭弹窗，不退出全屏
+    if ($('qrDialog') && !$('qrDialog').hidden) return;
+    closeFs();
   });
 
   var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
@@ -441,6 +448,84 @@
     phone.style.zoom = Math.max(s, 0.4);
   }
   window.addEventListener('resize', fit);
+
+  /* ---------------- 二维码弹窗 ---------------- */
+  var qrTimer = null;
+
+  function b64url(str) {
+    var bytes = new TextEncoder().encode(str);
+    var bin = '';
+    for (var i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+
+  // 仿照真实请假令牌的「头部.载荷.签名」三段结构；签名仅占位，未做任何签名运算
+  function demoQrText() {
+    var now = Math.floor(Date.now() / 1000);
+    var header = { alg: 'HS256' };
+    var payload = {
+      jti: String(Math.floor(Math.random() * 90000) + 10000),
+      iat: now,
+      iss: 'leave',
+      sub: JSON.stringify({ leave_id: 0 }),
+      exp: now + 62,
+      demo: true
+    };
+    var signature = b64url('Neusoft University');
+    return b64url(JSON.stringify(header)) + '.' + b64url(JSON.stringify(payload)) + '.' + signature;
+  }
+
+  function renderQr() {
+    var canvas = $('qrCanvas');
+    var qr = qrcode(0, 'L');           // 0 = 自动版本，L = 7%
+    qr.addData(demoQrText());
+    qr.make();
+
+    var count = qr.getModuleCount();
+    var size = 250;
+    var ctx = canvas.getContext('2d');
+
+    canvas.width = size;
+    canvas.height = size;
+    ctx.fillStyle = '#FFFFFF';
+    ctx.fillRect(0, 0, size, size);
+
+    // 按整数像素边界绘制模块，避免缩放松散产生网格状缝隙
+    // 中心 5×5 模块按要求留白（会覆盖该位置的校正图案）
+    var blankStart = Math.floor((count - 5) / 2);
+    var blankEnd = blankStart + 4;
+    ctx.fillStyle = '#3B3B3B';
+    for (var r = 0; r < count; r++) {
+      var y0 = Math.round(r * size / count);
+      var y1 = Math.round((r + 1) * size / count);
+      for (var c = 0; c < count; c++) {
+        if (!qr.isDark(r, c)) continue;
+        if (r >= blankStart && r <= blankEnd && c >= blankStart && c <= blankEnd) continue;
+        var x0 = Math.round(c * size / count);
+        var x1 = Math.round((c + 1) * size / count);
+        ctx.fillRect(x0, y0, x1 - x0, y1 - y0);
+      }
+    }
+  }
+
+  function openQr() {
+    $('qrDialog').hidden = false;
+    renderQr();
+    clearInterval(qrTimer);
+    qrTimer = setInterval(renderQr, 60000);
+  }
+
+  function closeQr() {
+    $('qrDialog').hidden = true;
+    clearInterval(qrTimer);
+    qrTimer = null;
+  }
+
+  if ($('qrClose')) $('qrClose').addEventListener('click', closeQr);
+  if ($('qrBackdrop')) $('qrBackdrop').addEventListener('click', closeQr);
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && $('qrDialog') && !$('qrDialog').hidden) closeQr();
+  });
 
   /* ---------------- init ---------------- */
   syncInputs();
