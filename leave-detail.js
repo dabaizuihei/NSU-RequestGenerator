@@ -4,27 +4,50 @@
   var STATUS_TEXT = { W: '审批中', A: '审批通过', R: '已驳回' };
   var $ = function (id) { return document.getElementById(id); };
 
+  function pad2(n) { return n < 10 ? '0' + n : '' + n; }
+  // 按本地时区格式化为 datetime-local 所需的 YYYY-MM-DDTHH:mm（不能用 toISOString，那是 UTC）
+  function toLocalDT(d) {
+    return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()) +
+      'T' + pad2(d.getHours()) + ':' + pad2(d.getMinutes());
+  }
+
   function defaults() {
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    var tomorrow = new Date(today.getTime() + 86400000);
+
+    // 开始时间：当天 12:00
+    var start = new Date(today.getTime() + 12 * 3600000);
+    // 结束时间：开始日期的后一天 12:00
+    var end = new Date(tomorrow.getTime() + 12 * 3600000);
+    // 发起时间：当前日期和时间
+    var create = new Date(now);
+    // 销假时间：当前日期和时间
+    var reportTime = new Date(now);
+    // 审批时间：默认 18:00；若当前已过 18:00，则取次日 18:00，保证晚于发起时间
+    var approval = new Date(today.getTime() + 18 * 3600000);
+    if (approval <= now) approval = new Date(tomorrow.getTime() + 18 * 3600000);
+
     return {
       status: 'W',
       color: 'cyan',
       needReport: true,
       reportStatus: '未销假',
-      reportTime: '2026-11-23T09:30',
+      reportTime: toLocalDT(reportTime),
       name: '王东软',
       no: '11451419198',
       leaveType: '事假',
       walkOut: true,
       cityOut: true,
       provOut: false,
-      start: '2026-11-21T08:00',
-      end: '2026-11-22T18:00',
-      create: '2026-11-20T21:34',
+      start: toLocalDT(start),
+      end: toLocalDT(end),
+      create: toLocalDT(create),
       reason: '导员我今天有点舒服，想请个假',
       location: '四川省成都市都江堰市青城山镇东软大道1号成都东软学院',
       attachments: [],
       flow: [
-        { teacher: '张西软', result: '通过', time: '2026-11-20T21:40', opinion: '' }
+        { teacher: '张西软', result: '通过', time: toLocalDT(approval), opinion: '' }
       ],
       next: '李南软'
     };
