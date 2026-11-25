@@ -1,0 +1,15 @@
+{
+  "name": "NSU-RequestGenerator·东软智慧学工请假预览",
+  "short_name": "东软智慧学工请假预览",
+  "description": "成都东软学院智慧学工请假预览工具",
+  "lang": "zh-CN",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    { "src": "img/logo.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "img/logo.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

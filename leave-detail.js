@@ -401,6 +401,13 @@
     if (e.key === 'Escape' && fsRoot && !fsRoot.hidden) closeFs();
   });
 
+  var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+  if (standalone && $('fsTip')) $('fsTip').hidden = true;
+
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  }
+
   /* ---------------- preview scaling ---------------- */
   var stage = $('stage'), phone = $('phone');
   var DEV_W = 390;
