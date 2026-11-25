@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>请假详情 · 可编辑预览</title>
+<link rel="icon" href="img/logo.png">
+<link rel="stylesheet" href="css/vendor.543e7e68.css">
+<link rel="stylesheet" href="css/screens.css">
+<link rel="stylesheet" href="leave-detail.css">
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-left">
+    <span class="bar-mark"><img src="img/logo.png" alt=""></span>
+    <div>
+      <h1>NSU-RequestGenerator</h1>
+      <p>东软智慧学工请求生成器</p>
+    </div>
+  </div>
+  <div class="bar-right">
+    <a class="gh-link" href="https://github.com/dabaizuihei/NSU-RequestGenerator" target="_blank" rel="noopener" title="在 GitHub 上查看项目" aria-label="GitHub 仓库">
+      <svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+    </a>
+  </div>
+</header>
+
+<main class="work">
+
+  <!-- ============ left: phone preview ============ -->
+  <section class="preview">
+    <div class="preview-tools">
+      <div class="tools-left">
+        <label for="fontSel">字体</label>
+        <select id="fontSel">
+          <option value="phone">手机系统默认</option>
+          <option value="ios">iPhone · 苹方</option>
+          <option value="android">Android · Roboto</option>
+          <option value="han">思源黑体</option>
+        </select>
+      </div>
+      <div class="tools-right">
+        <button type="button" class="fs-btn" id="btnFs" title="全屏查看这一页">全屏预览</button>
+      </div>
+    </div>
+
+
+    <div class="stage" id="stage">
+      <div class="phone" id="phone">
+        <div class="device" id="device" data-sys="ios">
+
+          <div class="appview" id="appview">
+            <div class="app-body">
+
+              <!-- top banner card -->
+              <div class="full-width row q-card q-card--flat no-shadow">
+                <div class="full-width text-center text-white q-card__section q-card__section--vert" id="banner">
+                  <div class="row items-center justify-center" id="bannerLine1">
+                    <i aria-hidden="true" class="material-icons q-icon notranslate" id="bannerIcon" style="font-size:.9rem">clear</i>
+                    <span style="font-size:.9rem" id="bannerStatusSmall">审批中</span>
+                  </div>
+                  <div class="row items-center justify-center" id="bannerLine2">
+                    <i aria-hidden="true" class="material-icons q-icon notranslate" id="bannerBigIcon" style="font-size:2rem;margin-right:6px">done</i>
+                    <span style="font-size:1.5rem" id="bannerBig">未销假</span>
+                    <span style="font-size:1rem" id="bannerReportTime"></span>
+                  </div>
+                </div>
+
+                <div class="full-width row justify-around q-card__section q-card__section--vert">
+                  <div class="col-6"><span class="text-grey">请假类型：</span><span id="v-type">事假</span></div>
+                  <div class="col-6"><span class="text-grey">需要离校：</span><span id="v-walkout"></span></div>
+                  <div class="col-6"><span class="text-grey">需要出市：</span><span id="v-cityout"></span></div>
+                  <div class="col-6"><span class="text-grey">需要出省：</span><span id="v-provout"></span></div>
+                  <div class="col-12"><span class="text-grey">请假学生：</span><span id="v-student"></span></div>
+                </div>
+              </div>
+
+              <!-- detail card -->
+              <div class="full-width row q-mt-sm q-card q-card--flat no-shadow">
+                <div class="full-width row justify-around q-card__section q-card__section--vert">
+                  <div class="col-12 q-mb-md text-left text-weight-bold">请假详情</div>
+                  <div class="col-12"><span class="text-grey">请假时间：</span><span id="v-time"></span></div>
+                  <div class="col-12 q-mt-sm"><span class="text-grey">发起时间：</span><span id="v-create"></span></div>
+                  <div class="col-12 q-mt-sm"><span class="text-grey">请假原因：</span><span id="v-reason"></span></div>
+                  <div class="col-12 q-mt-sm" id="rowLocation"><span class="text-grey">发起位置：</span><span id="v-location"></span></div>
+                  <div class="col-12 q-mt-sm" id="rowAttachment"><span class="text-grey">附件：</span><div id="v-attachments" class="att-list"></div></div>
+                </div>
+              </div>
+
+              <!-- flow card -->
+              <div class="full-width row q-mt-sm q-card q-card--flat no-shadow">
+                <div class="full-width q-list">
+                  <div class="row q-ml-md q-mt-md">
+                    <div class="col-12 text-left text-weight-bold">请假流程记录</div>
+                  </div>
+                  <div class="q-item q-item-type row no-wrap">
+                    <div class="q-px-sm q-pb-xs">
+                      <ul class="q-timeline q-timeline--dense q-timeline--dense--right" id="timeline"></ul>
+                    </div>
+                  </div>
+                  <hr role="separator" class="q-separator q-separator--horizontal">
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <header class="q-header ph bg-grey-3 text-black" id="ph">
+            <div class="q-toolbar row no-wrap items-center">
+              <button type="button" class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round q-btn--actionable q-focusable q-hoverable q-btn--wrap q-btn--dense">
+                <span class="q-focus-helper"></span>
+                <span class="q-btn__wrapper col row q-anchor--skip"><span class="q-btn__content text-center col items-center q-anchor--skip justify-center row"><i aria-hidden="true" role="img" class="material-icons q-icon notranslate">keyboard_arrow_left</i></span></span>
+              </button>
+              <div class="q-toolbar__title ellipsis">请假信息</div>
+              <button type="button" id="phDelete" class="q-btn q-btn-item non-selectable no-outline q-btn--flat q-btn--round q-btn--actionable q-focusable q-hoverable q-btn--wrap q-btn--dense">
+                <span class="q-focus-helper"></span>
+                <span class="q-btn__wrapper col row q-anchor--skip"><span class="q-btn__content text-center col items-center q-anchor--skip justify-center row"><i aria-hidden="true" role="img" class="material-icons q-icon notranslate">delete</i></span></span>
+              </button>
+            </div>
+          </header>
+
+          <footer class="q-footer pf bg-white text-primary" id="pf">
+            <div class="row justify-between">
+              <button type="button" class="q-btn q-btn-item non-selectable no-outline q-btn--standard q-btn--rectangle text-primary q-btn--actionable q-focusable q-hoverable" id="pfQr" style="width:60%;height:55px">
+                <span class="q-focus-helper"></span>
+                <span class="q-btn__wrapper col row q-anchor--skip"><span class="q-btn__content text-center col items-center q-anchor--skip justify-center row"><span style="font-size:16px">请假信息二维码</span></span></span>
+              </button>
+              <button type="button" class="q-btn q-btn-item non-selectable no-outline q-btn--standard q-btn--rectangle bg-primary text-white q-btn--actionable q-focusable q-hoverable" id="pfReport" style="width:40%;height:55px">
+                <span class="q-focus-helper"></span>
+                <span class="q-btn__wrapper col row q-anchor--skip"><span class="q-btn__content text-center col items-center q-anchor--skip justify-center row"><span style="font-size:16px">销假</span></span></span>
+              </button>
+            </div>
+          </footer>
+
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ right: editor ============ -->
+  <aside class="editor">
+    <div class="editor-head">
+      <h2>编辑详细信息</h2>
+    </div>
+
+    <div class="group">
+      <div class="group-title">状态</div>
+      <div class="field">
+        <label for="f-status">审批状态</label>
+        <select id="f-status">
+          <option value="W">审批中</option>
+          <option value="A">审批通过</option>
+          <option value="R">已驳回</option>
+        </select>
+      </div>
+      <div class="field field--switch" id="wrap-needreport">
+        <label for="f-needreport">需要销假</label>
+        <label class="switch"><input type="checkbox" id="f-needreport" checked><span></span></label>
+      </div>
+      <div class="field" id="wrap-reportstatus">
+        <label for="f-reportstatus">销假状态</label>
+        <select id="f-reportstatus">
+          <option value="未销假">未销假</option>
+          <option value="已销假">已销假</option>
+        </select>
+      </div>
+      <div class="field" id="wrap-reporttime">
+        <label for="f-reporttime">销假时间</label>
+        <input type="datetime-local" id="f-reporttime" value="2026-11-23T09:30">
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-title">基本信息</div>
+      <div class="field-grid">
+        <div class="field"><label for="f-name">请假学生</label><input type="text" id="f-name" value="王东软"></div>
+        <div class="field"><label for="f-no">学号</label><input type="text" id="f-no" value="11451419198"></div>
+      </div>
+      <div class="field-grid">
+        <div class="field"><label for="f-leavetype">请假类型</label>
+          <select id="f-leavetype">
+            <option value="事假">事假</option>
+            <option value="病假">病假</option>
+          </select>
+        </div>
+        <div class="field field--switch"><label for="f-walkout">需要离校</label><label class="switch"><input type="checkbox" id="f-walkout" checked><span></span></label></div>
+      </div>
+      <div class="field-grid">
+        <div class="field field--switch"><label for="f-cityout">需要出市</label><label class="switch"><input type="checkbox" id="f-cityout" checked><span></span></label></div>
+        <div class="field field--switch"><label for="f-provout">需要出省</label><label class="switch"><input type="checkbox" id="f-provout"><span></span></label></div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-title">时间</div>
+      <div class="field-grid">
+        <div class="field"><label for="f-start">开始时间</label><input type="datetime-local" id="f-start" value="2026-11-21T08:00"></div>
+        <div class="field"><label for="f-end">结束时间</label><input type="datetime-local" id="f-end" value="2026-11-22T18:00"></div>
+      </div>
+      <div class="field-grid">
+        <div class="field"><label for="f-create">发起时间</label><input type="datetime-local" id="f-create" value="2026-11-20T21:34"></div>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="group-title">内容</div>
+      <div class="field"><label for="f-reason">请假原因</label><textarea id="f-reason" rows="3">导员我今天有点舒服，想请个假</textarea></div>
+      <div class="field"><label for="f-location">发起位置</label><input type="text" id="f-location" value="四川省成都市都江堰市青城山东软大道1号成都东软学院" placeholder="留空则不显示该行"></div>
+    </div>
+
+    <div class="group">
+      <div class="group-title">附件</div>
+      <div class="upload">
+        <input type="file" id="f-files" accept="image/*" multiple hidden>
+        <button type="button" class="add-btn" id="pickFiles">添加图片附件</button>
+        <span class="upload-tip">会按 200×200 缩略图显示在“请假详情”里</span>
+      </div>
+      <div class="file-list" id="fileList"></div>
+    </div>
+
+    <div class="group">
+      <div class="group-title">审批流程</div>
+      <div class="flow" id="flowList"></div>
+      <button type="button" class="add-btn add-btn--line" id="addFlow">+ 添加审批节点</button>
+      <div class="field" id="wrap-next">
+        <label for="f-next">当前审核教师</label>
+        <input type="text" id="f-next" value="李南软" placeholder="审批中时显示">
+      </div>
+    </div>
+
+  </aside>
+
+
+</main>
+
+
+<div class="fs-root" id="fsRoot" hidden>
+  <div class="fs-body" id="fsBody"></div>
+</div>
+
+<script src="leave-detail.js"></script>
+</body>
+</html>
